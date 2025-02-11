@@ -6,6 +6,23 @@ AgroSentry is a scalable agricultural IoT monitoring system designed to help agr
 
 AgroSentry uses a microservices architecture deployed on Kubernetes, consisting of three main services:
 
+<div align="center">
+  <img src="/docs/assets/structure-design.png" alt="AgroSentry System Architecture" width="800"/>
+  <p><em>System Architecture Overview</em></p>
+
+  <img src="/docs/assets/shared-graph.png" alt="Shared Components Architecture" width="800"/>
+  <p><em>Shared Components Design</em></p>
+
+  <img src="/docs/assets/iot-graph.png" alt="IoT Service Architecture" width="400"/>
+  <p><em>IoT Service Architecture</em></p>
+
+  <img src="/docs/assets/web-graph.png" alt="Web Service Architecture" width="300"/>
+  <p><em>Web Service Architecture</em></p>
+
+  <img src="/docs/assets/notification-graph.png" alt="Notification Service Architecture" width="300"/>
+  <p><em>Notification Service Architecture</em></p>
+</div>
+
 1. **IoT Service** (2+ instances)
 
    - Handles all incoming data from weather stations
