@@ -12,5 +12,6 @@ setup(
         'django-phonenumber-field[phonenumbers]>=5.0.0',
         'asgiref>=3.8.1',
         'sqlparse>=0.5.3',
+        'pytz>=2025.1',
     ],
 )

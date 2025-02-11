@@ -95,16 +95,10 @@ cd agrosentry
 2. Create and activate virtual environment:
 
 ````bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
+python -m venv env
+source env/bin/activate  # Linux/Mac
 
-3. Install dependencies:
-
-```bash
-pip install -r requirements.txt
-````
-
-4. Set up environment variables:
+3. Set up environment variables:
 
 ```bash
 cp .env.example .env
@@ -147,3 +141,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Performance optimization
 - [ ] Security hardening
 - [ ] Deployment automation
+````

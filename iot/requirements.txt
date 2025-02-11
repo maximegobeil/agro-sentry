@@ -1,0 +1,7 @@
+asgiref==3.8.1
+Django==5.1.6
+django-phonenumber-field==8.0.0
+phonenumbers==8.13.54
+sqlparse==0.5.3
+-e ../shared
+python-dotenv==1.0.1

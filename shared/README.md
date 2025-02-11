@@ -37,7 +37,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'core.CustomUser'
 ```
 
-4. Run migrations:
+4. Run migrations: (only if you are installing the shared app for the first time)
 
 ```bash
 python manage.py makemigrations core
