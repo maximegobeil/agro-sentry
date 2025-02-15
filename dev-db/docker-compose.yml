@@ -1,0 +1,32 @@
+services:
+  db-primary:
+    image: postgres:17.2
+    container_name: agrosentry-db-primary
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5000:5432"
+    volumes:
+      - pg_primary_data:/var/lib/postgresql/data
+      - ./config/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+    command: postgres -c 'wal_level=replica' -c 'max_wal_senders=10' -c 'max_replication_slots=10'
+
+  db-replica:
+    image: postgres:17.2
+    container_name: agrosentry-db-replica
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5001:5432"
+    volumes:
+      - pg_replica_data:/var/lib/postgresql/data
+    depends_on:
+      - db-primary
+
+volumes:
+  pg_primary_data:
+  pg_replica_data:
