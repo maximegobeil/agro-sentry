@@ -4,3 +4,4 @@ django-phonenumber-field==8.0.0
 phonenumbers==8.13.54
 sqlparse==0.5.3
 python-dotenv==1.0.1
+psycopg2-binary==2.9.10

@@ -80,11 +80,54 @@ WSGI_APPLICATION = 'iot.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('PG_DB'),
+        'USER': os.getenv('PG_USER'),
+        'PASSWORD': os.getenv('PG_PASSWORD'),
+        'HOST': os.getenv('PG_HOST'),
+        'PORT': os.getenv('PG_PORT'),
+    },
+    'replica': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('PG_DB'),
+        'USER': os.getenv('PG_USER'),
+        'PASSWORD': os.getenv('PG_PASSWORD'),
+        'HOST': os.getenv('PG_REPLICA_HOST'),
+        'PORT': os.getenv('PG_REPLICA_PORT'),
+    },
+    'timescale_shard1': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('TIMESCALE_DB'),
+        'USER': os.getenv('TIMESCALE_USER'),
+        'PASSWORD': os.getenv('TIMESCALE_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5002',
+    },
+    'timescale_shard1_replica': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('TIMESCALE_DB'),
+        'USER': os.getenv('TIMESCALE_USER'),
+        'PASSWORD': os.getenv('TIMESCALE_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5003',
+    },
+    'timescale_shard2': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('TIMESCALE_DB'),
+        'USER': os.getenv('TIMESCALE_USER'),
+        'PASSWORD': os.getenv('TIMESCALE_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5004',
+    },
+    'timescale_shard2_replica': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('TIMESCALE_DB'),
+        'USER': os.getenv('TIMESCALE_USER'),
+        'PASSWORD': os.getenv('TIMESCALE_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5005',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
