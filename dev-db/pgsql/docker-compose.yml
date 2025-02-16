@@ -10,8 +10,9 @@ services:
       - "5000:5432"
     volumes:
       - pg_primary_data:/var/lib/postgresql/data
-      - ./config/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     command: postgres -c 'wal_level=replica' -c 'max_wal_senders=10' -c 'max_replication_slots=10'
+    networks:
+      - agrosentry_db_network
 
   db-replica:
     image: postgres:17.2
@@ -26,7 +27,13 @@ services:
       - pg_replica_data:/var/lib/postgresql/data
     depends_on:
       - db-primary
+    networks:
+      - agrosentry_db_network
 
 volumes:
   pg_primary_data:
   pg_replica_data:
+
+networks:
+  agrosentry_db_network:
+    name: agrosentry_db_network

@@ -1,0 +1,72 @@
+services:
+  timescale-shard1:
+    image: timescale/timescaledb:latest-pg17
+    container_name: agrosentry-timescale-shard1
+    environment:
+      POSTGRES_DB: ${TIMESCALE_DB}
+      POSTGRES_USER: ${TIMESCALE_USER}
+      POSTGRES_PASSWORD: ${TIMESCALE_PASSWORD}
+    ports:
+      - "5002:5432"
+    volumes:
+      - timescale_shard1_data:/var/lib/postgresql/data
+    command: postgres -c 'wal_level=replica' -c 'max_wal_senders=10' -c 'max_replication_slots=10'
+    networks:
+      - agrosentry_timescale_db_network
+
+  timescale-shard1-replica:
+    image: timescale/timescaledb:latest-pg17
+    container_name: agrosentry-timescale-shard1-replica
+    environment:
+      POSTGRES_DB: ${TIMESCALE_DB}
+      POSTGRES_USER: ${TIMESCALE_USER}
+      POSTGRES_PASSWORD: ${TIMESCALE_PASSWORD}
+    ports:
+      - "5003:5432"
+    volumes:
+      - timescale_shard1_replica_data:/var/lib/postgresql/data
+    depends_on:
+      - timescale-shard1
+    networks:
+      - agrosentry_timescale_db_network
+
+  timescale-shard2:
+    image: timescale/timescaledb:latest-pg17
+    container_name: agrosentry-timescale-shard2
+    environment:
+      POSTGRES_DB: ${TIMESCALE_DB}
+      POSTGRES_USER: ${TIMESCALE_USER}
+      POSTGRES_PASSWORD: ${TIMESCALE_PASSWORD}
+    ports:
+      - "5004:5432"
+    volumes:
+      - timescale_shard2_data:/var/lib/postgresql/data
+    command: postgres -c 'wal_level=replica' -c 'max_wal_senders=10' -c 'max_replication_slots=10'
+    networks:
+      - agrosentry_timescale_db_network
+
+  timescale-shard2-replica:
+    image: timescale/timescaledb:latest-pg17
+    container_name: agrosentry-timescale-shard2-replica
+    environment:
+      POSTGRES_DB: ${TIMESCALE_DB}
+      POSTGRES_USER: ${TIMESCALE_USER}
+      POSTGRES_PASSWORD: ${TIMESCALE_PASSWORD}
+    ports:
+      - "5005:5432"
+    volumes:
+      - timescale_shard2_replica_data:/var/lib/postgresql/data
+    depends_on:
+      - timescale-shard2
+    networks:
+      - agrosentry_timescale_db_network
+
+volumes:
+  timescale_shard1_data:
+  timescale_shard1_replica_data:
+  timescale_shard2_data:
+  timescale_shard2_replica_data:
+
+networks:
+  agrosentry_timescale_db_network:
+    name: agrosentry_timescale_db_network

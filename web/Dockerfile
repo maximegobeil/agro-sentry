@@ -13,7 +13,8 @@ RUN apk add --no-cache \
     musl-dev \
     python3-dev \
     libffi-dev \
-    openssl-dev
+    openssl-dev \
+    postgresql-dev
 
 COPY shared/ /app/shared/
 
