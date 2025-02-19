@@ -122,6 +122,16 @@ cp .env.example .env
 # Edit .env with your configuration
 ```
 
+create the images:
+
+```bash
+docker build -t agrosentry-web:latest -f web/Dockerfile .
+docker build -t agrosentry-iot:latest -f iot/Dockerfile .
+docker build -t agrosentry-notification:latest -f notification/Dockerfile .
+```
+
+kubectl apply -f k8s/web/deployment.yaml
+
 ### Kubernetes Deployment
 
 Detailed deployment instructions are available in the [deployment documentation](docs/deployment.md).

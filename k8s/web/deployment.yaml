@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agrosentry-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agrosentry-web
+  template:
+    metadata:
+      labels:
+        app: agrosentry-web
+    spec:
+      containers:
+        - name: web
+          image: agrosentry-web:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PG_HOST
+              #value: "agrosentry-db-primary"
+              value: "host.docker.internal"
+            - name: PG_REPLICA_HOST
+              #value: "agrosentry-db-replica"
+              value: "host.docker.internal"
+            - name: PG_DB
+              value: "agrosentry"
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: PG_USER
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: PG_PASSWORD
+            - name: PG_PORT
+              value: "5000"
+            - name: PG_REPLICA_PORT
+              value: "5001"

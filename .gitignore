@@ -55,3 +55,8 @@ coverage.xml
 
 # Backup files
 *.bak
+
+# Kubernetes secrets
+*-secret.yaml
+secrets.yaml
+*-secrets.yaml

@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agrosentry-iot
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: agrosentry-iot
+  template:
+    metadata:
+      labels:
+        app: agrosentry-iot
+    spec:
+      containers:
+        - name: iot
+          image: agrosentry-iot:latest
+          ports:
+            - containerPort: 8001 # Different port for IoT service
+          env:
+            - name: PG_HOST
+              value: "host.docker.internal"
+            - name: PG_REPLICA_HOST
+              value: "host.docker.internal"
+            - name: PG_DB
+              value: "agrosentry"
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: PG_USER
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: PG_PASSWORD
+            - name: PG_PORT
+              value: "5000"
+            - name: PG_REPLICA_PORT
+              value: "5001"
+
+            # TimescaleDB Shard1 and Replica
+            - name: TIMESCALE_SHARD1_HOST
+              value: "host.docker.internal"
+            - name: TIMESCALE_SHARD1_REPLICA_HOST
+              value: "host.docker.internal"
+            - name: TIMESCALE_SHARD1_DB
+              value: "agrosentry"
+            - name: TIMESCALE_SHARD1_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: PG_USER
+            - name: TIMESCALE_SHARD1_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: PG_PASSWORD
+            - name: TIMESCALE_SHARD1_PORT
+              value: "5002"
+            - name: TIMESCALE_SHARD1_REPLICA_PORT
+              value: "5003"
+
+            # TimescaleDB Shard2 and Replica
+            - name: TIMESCALE_SHARD2_HOST
+              value: "host.docker.internal"
+            - name: TIMESCALE_SHARD2_REPLICA_HOST
+              value: "host.docker.internal"
+            - name: TIMESCALE_SHARD2_DB
+              value: "agrosentry"
+            - name: TIMESCALE_SHARD2_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: PG_USER
+            - name: TIMESCALE_SHARD2_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: PG_PASSWORD
+            - name: TIMESCALE_SHARD2_PORT
+              value: "5004"
+            - name: TIMESCALE_SHARD2_REPLICA_PORT
+              value: "5005"
+
+            - name: RABBITMQ_HOST
+              value: "rabbitmq-service"
+            - name: RABBITMQ_PORT
+              value: "5672"
