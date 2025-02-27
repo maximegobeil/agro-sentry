@@ -5,3 +5,4 @@ phonenumbers==8.13.54
 sqlparse==0.5.3
 python-dotenv==1.0.1
 psycopg2==2.9.10
+drf-spectacular==0.28.0
