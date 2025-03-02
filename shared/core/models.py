@@ -100,7 +100,6 @@ class Address(models.Model):
         ("shipping", "Shipping"),
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address_type = models.CharField(max_length=10, choices=ADDRESS_TYPE)
     street_number = models.CharField(max_length=10)
     street_name = models.CharField(max_length=255)
