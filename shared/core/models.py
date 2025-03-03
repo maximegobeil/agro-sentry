@@ -76,9 +76,6 @@ class PhoneNumber(models.Model):
         ("other", "Other"),
     ]
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="phone_numbers"
-    )
     phone_number = PhoneNumberField()
     phone_type = models.CharField(max_length=10, choices=PHONE_TYPE)
     is_primary = models.BooleanField(default=False)

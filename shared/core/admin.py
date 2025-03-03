@@ -70,12 +70,10 @@ if getattr(settings, "ADMIN_ENABLED", False):
         list_display = (
             "phone_number",
             "phone_type",
-            "user",
             "is_primary",
             "is_verified",
         )
         list_filter = ("phone_type", "is_primary", "is_verified")
-        search_fields = ("phone_number", "user__email")
 
     @admin.register(Address)
     class AddressAdmin(admin.ModelAdmin):
