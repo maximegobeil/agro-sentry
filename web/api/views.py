@@ -48,7 +48,9 @@ class OrganizationViewSet(
     serializer_class = OrganizationSerializer
 
     def get_queryset(self):
-        return Organization.object.filter(user=self.request.user)
+        return Organization.objects.filter(
+            organizationmembership__user=self.request.user
+        )
 
 
 class OrganizationMembershipViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -56,7 +58,7 @@ class OrganizationMembershipViewSet(mixins.ListModelMixin, viewsets.GenericViewS
     serializer_class = OrganizationMemberSerializer
 
     def get_queryset(self):
-        organization_id = self.request.query_params.get("organization_id")
+        organization_id = self.kwargs.get("pk")
 
         if organization_id:
             return OrganizationMembership.objects.filter(
@@ -66,35 +68,35 @@ class OrganizationMembershipViewSet(mixins.ListModelMixin, viewsets.GenericViewS
             return OrganizationMembership.objects.none()
 
 
-class OrganizationStatsViewSet(viewsets.ReadOnlyModelViewSet):
+class OrganizationStatsViewSet(viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = OrganizationStatsSerializer
 
-    def get_queryset(self):
-        organization_id = self.request.query_params.get("organization_id")
-
-        queryset = (
-            Organization.objects.filter(id=organization_id)
-            if organization_id
-            else Organization.objects.none()
-        )
-
-        queryset = queryset.annotate(
-            total_stations=Count("station", distinct=True),
-            total_sensors=Count("station__sensor", distinct=True),
-            total_notification=Count("station__notificationpreference", distinct=True),
-        )
-
-        return queryset
-
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
+        organization_id = self.kwargs.get("pk")
+
+        try:
+            instance = Organization.objects.get(id=organization_id)
+        except Organization.DoesNotExist:
+            return Response({"detail": "Not found."}, status=404)
+
+        instance = (
+            Organization.objects.filter(id=organization_id)
+            .annotate(
+                total_stations=Count("station", distinct=True),
+                total_sensors=Count("station__sensor", distinct=True),
+                total_notifications=Count(
+                    "station__notificationpreference", distinct=True
+                ),
+            )
+            .first()
+        )
 
         serializer = self.get_serializer(instance)
         data = serializer.data
 
         sensor_distribution = (
-            Sensor.objects.filter(station__oganization=instance)
+            Sensor.objects.filter(station__organization=instance)
             .values("sensor_type__name")
             .annotate(count=Count("id"))
         )
