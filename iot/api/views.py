@@ -1,15 +1,15 @@
 from django.db.models import Q
 from rest_framework import generics, status
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import SensorReading
+from .permissions import HasValidAPIKey
 from .serializers import SensorReadingSerializer
 
 
 class SensorReadingUploadView(APIView):
-    authentication_classes = [TokenAuthentication]
+    permission_classes = [HasValidAPIKey]
     serializer_class = SensorReadingSerializer
 
     def post(self, request):
@@ -24,6 +24,7 @@ class SensorReadingUploadView(APIView):
 
 
 class SensorReadingListView(generics.ListAPIView):
+    permission_classes = [HasValidAPIKey]
     serializer_class = SensorReadingSerializer
 
     def get_queryset(self):
@@ -47,7 +48,4 @@ class SensorReadingListView(generics.ListAPIView):
         if end_time:
             query &= Q(timestamp__lte=end_time)
 
-        readings = SensorReading.objects.filter(query)[:limit]
-
-        serializer = SensorReadingSerializer(readings, many=True)
-        return Response(serializer.data)
+        return SensorReading.objects.filter(query)[:limit]
